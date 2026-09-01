@@ -34,18 +34,18 @@ gestion-centre-formation/
 ## Stack technique
 
 **Backend**
-Java v 21.0.11
+```Java v 21.0.11
 Spring Framework (web / webmvc / orm)	7.0.8
 Spring Security	7.1.0
 Spring Data JPA / Commons	4.1.0
 Hibernate ORM	7.4.1.Final
 Tomcat embarqué	11.0.22
-MySQL Connector/J	9.7.0
+MySQL Connector/J	9.7.0```
 
 **Frontend**
-Angular CLI: 20.3.28
+```Angular CLI: 20.3.28
 Node: 24.13.0
-
+```
 
 ## Installation et lancement
 
@@ -86,9 +86,7 @@ ng serve
 L'application est ensuite accessible sur `http://localhost:4200`.
 
 
-## Captures d'écran
 
-_À ajouter : quelques captures de l'interface pour illustrer le projet._
 
 ## Auteur
 
