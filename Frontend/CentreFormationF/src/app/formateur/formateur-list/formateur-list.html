@@ -1,0 +1,101 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h3 class="mb-1 fw-bold text-dark">Liste des Enseignants</h3>
+    <p class="text-muted small mb-0">{{ formateur.length }} enseignant(s) inscrit(s)</p>
+  </div>
+  <button class="btn btn-add-teacher d-flex align-items-center gap-2" routerLink="/enseignant/add">
+    <i class="bi bi-plus-lg"></i>
+    Ajouter un enseignant
+  </button>
+</div>
+
+<!-- Cartes de statistiques -->
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3">
+    <div class="stat-card bg-light-neutral">
+      <p class="stat-label">Total enseignants</p>
+      <p class="stat-value">{{ formateur.length }}</p>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="stat-card stat-purple">
+      <p class="stat-label">Spécialités</p>
+      <p class="stat-value">{{ uniqueSpecialites().length }}</p>
+    </div>
+  </div>
+  <div class="col-6 col-md-3" *ngFor="let spec of topSpecialites(); let i = index">
+    <div class="stat-card" [ngClass]="statColorClass(i)">
+      <p class="stat-label">{{ spec }}</p>
+      <p class="stat-value">{{ countBySpecialite(spec) }}</p>
+    </div>
+  </div>
+</div>
+
+<!-- Carte principale -->
+<div class="card main-table-card border-0">
+  <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <h5 class="mb-0 fw-semibold">Liste des enseignants</h5>
+    <div class="d-flex align-items-center gap-2">
+      <div class="search-box d-flex align-items-center">
+        <i class="bi bi-search"></i>
+        <input
+          type="text"
+          class="form-control form-control-sm border-0 shadow-none"
+          placeholder="Rechercher un enseignant..."
+          [(ngModel)]="searchTerm"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0 align-middle">
+      <thead>
+        <tr>
+          <th class="ps-3">Enseignant</th>
+          <th>Spécialité</th>
+          <th class="text-end pe-3">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let f of filteredFormateur(); let i = index">
+          <td class="ps-3">
+            <div class="d-flex align-items-center gap-2">
+              <div class="avatar" [ngClass]="avatarClass(i)">
+                {{ f.firstName[0] }}{{ f.lastName[0] }}
+              </div>
+              <span class="fw-medium">{{ f.firstName }} {{ f.lastName }}</span>
+            </div>
+          </td>
+          <td>
+            <span class="badge-level" [ngClass]="specialiteColorClass(f.speciality)">
+              {{ f.speciality }}
+            </span>
+          </td>
+          <td class="text-end pe-3">
+            <button class="btn btn-sm btn-icon me-1" [routerLink]="['/enseignant', 'edit', f.id]">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-sm btn-icon btn-icon-danger" (click)="onDelete(f.id)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredFormateur().length === 0">
+          <td colspan="3" class="text-center text-muted py-5">
+            <i class="bi bi-person-x d-block mb-2" style="font-size:1.8rem; color:#cbd5e1;"></i>
+            Aucun enseignant pour l'instant.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+@if (errorPopup) {
+  <div class="popup-backdrop" (click)="errorPopup = null">
+    <div class="popup-box" (click)="$event.stopPropagation()">
+      <p>{{ errorPopup }}</p>
+      <button (click)="errorPopup = null">OK</button>
+    </div>
+  </div>
+}

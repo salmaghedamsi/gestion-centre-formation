@@ -1,0 +1,95 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h3 class="mb-1 fw-bold text-dark">Formations</h3>
+    <p class="text-muted small mb-0">{{ formations.length }} formation(s) disponible(s)</p>
+  </div>
+  <button class="btn btn-add-teacher d-flex align-items-center gap-2" routerLink="/formations/add">
+    <i class="bi bi-plus-lg"></i>
+    Ajouter une formation
+  </button>
+</div>
+
+<!-- Cartes de statistiques -->
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-4">
+    <div class="stat-card bg-light-neutral">
+      <p class="stat-label">Total formations</p>
+      <p class="stat-value">{{ formations.length }}</p>
+    </div>
+  </div>
+  <div class="col-6 col-md-4">
+    <div class="stat-card stat-purple">
+      <p class="stat-label">Mensuel</p>
+      <p class="stat-value">{{ countByPayment('MONTHLY') }}</p>
+    </div>
+  </div>
+    <div class="col-6 col-md-4">
+    <div class="stat-card stat-blue">
+      <p class="stat-label">À la séance</p>
+      <p class="stat-value">{{ countByPayment('PER_SESSION') }}</p>
+    </div>
+  </div>
+</div>
+
+<!-- Carte principale -->
+<div class="card main-table-card border-0">
+  <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <h5 class="mb-0 fw-semibold">Liste des formations</h5>
+    <div class="d-flex align-items-center gap-2">
+      <div class="search-box d-flex align-items-center">
+        <i class="bi bi-search"></i>
+        <input
+          type="text"
+          class="form-control form-control-sm border-0 shadow-none"
+          placeholder="Rechercher une formation..."
+          [(ngModel)]="searchTerm"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0 align-middle">
+      <thead>
+        <tr>
+          <th class="ps-3">Matière</th>
+          <th>Prix</th>
+          <th>Mode de paiement</th>
+          <th class="text-end pe-3">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let formation of filteredFormations(); let i = index">
+          <td class="ps-3">
+            <div class="d-flex align-items-center gap-2">
+              <div class="avatar" [ngClass]="avatarClass(i)">
+                <i class="bi bi-book"></i>
+              </div>
+              <span class="fw-medium">{{ formation.Subject }}</span>
+            </div>
+          </td>
+          <td class="fw-medium">{{ formation.Price }} Dt</td>
+          <td>
+            <span class="badge-level" [ngClass]="formation.paymentType === 'MONTHLY' ? 'level-monthly' : 'level-session'">
+              {{ formation.paymentType === 'MONTHLY' ? 'Mensuel' : 'À la séance' }}
+            </span>
+          </td>
+          <td class="text-end pe-3">
+            <button class="btn btn-sm btn-icon me-1" [routerLink]="['/formations/edit', formation.id]">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-sm btn-icon btn-icon-danger" (click)="supprimer(formation.id)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredFormations().length === 0">
+          <td colspan="4" class="text-center text-muted py-5">
+            <i class="bi bi-journal-x d-block mb-2" style="font-size:1.8rem; color:#cbd5e1;"></i>
+            Aucune formation pour l'instant.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

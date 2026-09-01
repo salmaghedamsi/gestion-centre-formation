@@ -1,0 +1,197 @@
+<div *ngIf="session">
+
+  <!-- Retour -->
+  <a
+    [routerLink]="['/groups', session.group?.id]"
+    class="back-link"
+  >
+    <i class="bi bi-arrow-left"></i>
+    Retour au groupe
+  </a>
+
+  <!-- En-tête -->
+  <div class="session-header">
+
+    <div>
+      <h3>
+        Séance du {{ session.date | date:'dd/MM/yyyy' }}
+      </h3>
+
+      <p *ngIf="session.startTime" class="session-time">
+        <i class="bi bi-clock"></i>
+
+        {{ session.startTime.substring(0,5) }}
+
+        <span *ngIf="session.endTime">
+          - {{ session.endTime.substring(0,5) }}
+        </span>
+      </p>
+    </div>
+
+    <span
+      class="badge free-badge"
+      *ngIf="session.free"
+    >
+      Séance gratuite
+    </span>
+
+  </div>
+
+
+  <!-- Résumé des présences -->
+  <div class="row g-3 mb-4">
+
+    <div class="col-md-4">
+      <div class="stat-card">
+        <div class="stat-icon present-icon">
+          <i class="bi bi-check-lg"></i>
+        </div>
+
+        <div>
+          <div class="stat-label">Présents</div>
+          <div class="stat-number">
+            {{ nombrePresents() }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-md-4">
+      <div class="stat-card">
+        <div class="stat-icon absent-icon">
+          <i class="bi bi-x-lg"></i>
+        </div>
+
+        <div>
+          <div class="stat-label">Absents</div>
+          <div class="stat-number">
+            {{ nombreAbsents() }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    
+  </div>
+
+
+  <!-- Liste des élèves -->
+  <div class="students-card">
+
+    <div class="students-header">
+      <div>
+        <h5 class="mb-1">Présences</h5>
+        <p class="text-muted mb-0">
+          Liste des élèves du groupe
+        </p>
+      </div>
+
+      <span class="student-count">
+        {{ elevesGroupe.length }} élèves
+      </span>
+    </div>
+
+
+    <div
+      class="student-row"
+      *ngFor="let eleve of elevesGroupe"
+    >
+
+      <!-- Informations élève -->
+      <div class="student-info">
+
+        <div class="avatar-circle">
+          {{ eleve.firstName.charAt(0) }}{{ eleve.lastName.charAt(0) }}
+        </div>
+
+        <div>
+          <div class="student-name">
+            {{ eleve.firstName }} {{ eleve.lastName }}
+          </div>
+
+          <div class="student-status">
+
+            <span
+              *ngIf="!aUneFiche(eleve.id)"
+              class="text-muted"
+            >
+              Présence non marquée
+            </span>
+
+            <span
+              *ngIf="aUneFiche(eleve.id) && estPresent(eleve.id)"
+              class="text-success"
+            >
+              Présent
+            </span>
+
+            <span
+              *ngIf="aUneFiche(eleve.id) && !estPresent(eleve.id)"
+              class="text-danger"
+            >
+              Absent
+            </span>
+
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- Bouton présence -->
+      <button
+        class="presence-btn"
+        [class.present]="aUneFiche(eleve.id) && estPresent(eleve.id)"
+        [class.absent]="aUneFiche(eleve.id) && !estPresent(eleve.id)"
+        [class.not-marked]="!aUneFiche(eleve.id)"
+        (click)="togglePresence(eleve.id)"
+      >
+
+        <i
+          class="bi"
+          [class.bi-check-lg]="aUneFiche(eleve.id) && estPresent(eleve.id)"
+          [class.bi-x-lg]="aUneFiche(eleve.id) && !estPresent(eleve.id)"
+          [class.bi-circle]="!aUneFiche(eleve.id)"
+        ></i>
+
+        {{ !aUneFiche(eleve.id)
+          ? 'À marquer'
+          : (estPresent(eleve.id) ? 'Présent' : 'Absent')
+        }}
+
+      </button>
+
+    </div>
+
+
+    <!-- Aucun élève -->
+     <div
+  class="text-end mt-4"
+  *ngIf="elevesGroupe.length > 0"
+>
+  <button
+    class="btn btn-primary"
+    (click)="savePresences()"
+    [disabled]="saving"
+  >
+    <i class="bi bi-check-lg"></i>
+
+    {{ saving ? 'Enregistrement...' : 'Valider les présences' }}
+  </button>
+</div>
+    <div
+      class="empty-state"
+      *ngIf="elevesGroupe.length === 0"
+    >
+      <i class="bi bi-people"></i>
+
+      <p>
+        Aucun élève inscrit dans ce groupe.
+      </p>
+    </div>
+
+  </div>
+
+</div>

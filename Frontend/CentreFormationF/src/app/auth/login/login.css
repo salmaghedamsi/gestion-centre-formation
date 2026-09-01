@@ -1,0 +1,117 @@
+.login-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* --- Partie gauche : illustration --- */
+.left-side {
+  flex: 1.1;
+  background: linear-gradient(160deg, #1d4ed8 0%, #1e3a8a 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.left-side img {
+  max-width: 320px;
+  width: 100%;
+  border-radius: 16px;
+  margin-bottom: 2rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+}
+
+.left-side h1 {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.left-side p {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 360px;
+  line-height: 1.6;
+}
+
+/* --- Partie droite : formulaire --- */
+.right-side {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fb;
+  padding: 2rem;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  border-radius: 16px;
+  padding: 2.5rem 2.25rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.logo h2 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 0.25rem;
+}
+
+.logo span {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  font-size: 13px;
+}
+
+.options a {
+  color: #1d4ed8;
+  text-decoration: none;
+}
+
+.options a:hover {
+  text-decoration: underline;
+}
+
+.login-button {
+  width: 100%;
+  height: 46px;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 10px !important;
+}
+
+/* --- Responsive : cache l'illustration sur petit écran --- */
+@media (max-width: 860px) {
+  .left-side {
+    display: none;
+  }
+
+  .right-side {
+    flex: 1;
+  }
+}

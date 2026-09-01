@@ -1,0 +1,74 @@
+<div class="form-page-wrapper">
+
+  <a routerLink="/teachers" class="back-link">
+    <i class="bi bi-arrow-left"></i> Retour aux formateurs
+  </a>
+
+  <div class="form-header">
+    <div class="form-header-icon">
+      <i class="bi bi-person-badge"></i>
+    </div>
+    <div>
+      <h3 class="mb-0">{{ isEditMode ? 'Modifier le formateur' : 'Ajouter un formateur' }}</h3>
+      <p class="text-muted small mb-0">Renseignez les informations du formateur</p>
+    </div>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-card">
+
+    <div class="row g-3 mb-3">
+      <div class="col-6">
+        <label class="form-label">
+          <i class="bi bi-person"></i> Nom
+        </label>
+        <input type="text" class="form-control" formControlName="firstName" placeholder="Ben Ali">
+        <div class="text-danger small mt-1" *ngIf="form.get('firstName')?.invalid && form.get('firstName')?.touched">
+          Le nom est obligatoire.
+        </div>
+      </div>
+      <div class="col-6">
+        <label class="form-label">
+          <i class="bi bi-person"></i> Prénom
+        </label>
+        <input type="text" class="form-control" formControlName="lastName" placeholder="Karim">
+        <div class="text-danger small mt-1" *ngIf="form.get('lastName')?.invalid && form.get('lastName')?.touched">
+          Le prénom est obligatoire.
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">
+        <i class="bi bi-envelope"></i> Email
+      </label>
+      <input type="email" class="form-control" formControlName="email" placeholder="karim.benali@email.com">
+      <div class="text-danger small mt-1" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
+        Adresse email invalide.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">
+        <i class="bi bi-telephone"></i> Téléphone
+      </label>
+      <input type="text" class="form-control" formControlName="phone" placeholder="06 12 34 56 78">
+    </div>
+
+    <div class="mb-1">
+      <label class="form-label">
+        <i class="bi bi-award"></i> Spécialité
+      </label>
+      <input type="text" class="form-control" formControlName="speciality" placeholder="Ex: Mathématiques">
+    </div>
+
+    <div class="d-flex gap-2 form-actions">
+      <button type="submit" class="btn btn-add-teacher flex-fill" [disabled]="form.invalid || saving">
+        <i class="bi bi-check-lg"></i>
+        {{ saving ? 'Enregistrement...' : (isEditMode ? 'Enregistrer' : 'Ajouter le formateur') }}
+      </button>
+      <button type="button" class="btn btn-outline-secondary flex-fill" (click)="onCancel()">Annuler</button>
+    </div>
+
+  </form>
+
+</div>

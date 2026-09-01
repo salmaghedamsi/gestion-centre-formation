@@ -1,0 +1,126 @@
+<div *ngIf="groupStudent" class="payment-page-wrapper">
+
+  <a [routerLink]="['/groups', groupStudent.group?.id]" class="back-link">
+    <i class="bi bi-arrow-left"></i> Retour au groupe
+  </a>
+
+  <div class="student-header">
+    <div class="avatar-circle-lg">
+      {{ groupStudent.student.firstName.charAt(0) }}{{ groupStudent.student.lastName.charAt(0) }}
+    </div>
+    <div>
+      <h4 class="mb-0">{{ groupStudent.student.firstName }} {{ groupStudent.student.lastName }}</h4>
+      <p class="text-muted mb-0 d-flex align-items-center gap-1">
+        <i class="bi bi-diagram-3"></i>{{ groupStudent.group?.name }}
+      </p>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-4" *ngIf="summary">
+
+    <div class="col-md-4">
+      <div class="stat-card">
+        <div class="stat-icon stat-icon-paid">
+          <i class="bi bi-cash-stack"></i>
+        </div>
+        <div>
+          <div class="stat-label">Total payé</div>
+          <div class="stat-number">{{ summary.totalAmountPaid }} Dt</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="stat-card">
+        <div class="stat-icon stat-icon-units">
+          <i class="bi" [ngClass]="estMensuel ? 'bi-calendar-check' : 'bi-clipboard-check'"></i>
+        </div>
+        <div>
+          <div class="stat-label">{{ estMensuel ? 'Mois couverts' : 'Séances couvertes' }}</div>
+          <div class="stat-number">{{ summary.unitsPaid }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="stat-card" [ngClass]="summary.balanceUnits >= 0 ? 'stat-card-positive' : 'stat-card-negative'">
+        <div class="stat-icon" [ngClass]="summary.balanceUnits >= 0 ? 'present-icon' : 'absent-icon'">
+          <i class="bi" [ngClass]="summary.balanceUnits >= 0 ? 'bi-check-lg' : 'bi-exclamation-lg'"></i>
+        </div>
+        <div>
+          <div class="stat-label">Solde</div>
+          <div class="stat-number" [ngClass]="soldeClass()">{{ soldeLabel() }}</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="payment-form-card">
+    <p class="fw-semibold mb-3 d-flex align-items-center gap-2">
+      <i class="bi bi-plus-circle"></i> Ajouter un paiement
+    </p>
+    <div class="row g-2 align-items-end">
+      <div class="col-md-3">
+        <label class="mini-label">Date</label>
+        <input type="date" class="form-control" [(ngModel)]="nouvelleDatePaiement">
+      </div>
+      <div class="col-md-3">
+        <label class="mini-label">Montant (Dt)</label>
+        <input type="number" class="form-control" [(ngModel)]="nouveauMontant" placeholder="0.00">
+      </div>
+      <div class="col-md-3">
+        <label class="mini-label">{{ estMensuel ? 'Mois dus' : 'Séances dues' }}</label>
+        <input
+          type="number"
+          class="form-control"
+          [(ngModel)]="nouvellesUnites"
+          (ngModelChange)="onUnitesChange()"
+          placeholder="1"
+        >
+      </div>
+      <div class="col-md-2">
+        <label class="mini-label">Commentaire</label>
+        <input type="text" class="form-control" [(ngModel)]="nouveauCommentaire" placeholder="Optionnel">
+      </div>
+      <div class="col-md-1">
+        <button class="btn btn-add-teacher w-100" (click)="ajouterPaiement()" [disabled]="saving">
+          <i class="bi" [ngClass]="saving ? 'bi-hourglass-split' : 'bi-plus-lg'"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex align-items-center justify-content-between mb-2">
+    <p class="fw-semibold mb-0">Historique</p>
+    <span class="sessions-count">{{ payments.length }} paiement(s)</span>
+  </div>
+
+  <div class="payments-list-card">
+    <div class="payment-row" *ngFor="let p of payments">
+      <div class="d-flex align-items-center gap-3">
+        <div class="stat-icon stat-icon-paid stat-icon-sm">
+          <i class="bi bi-receipt"></i>
+        </div>
+        <div>
+          <div class="fw-semibold">{{ p.paymentDate | date:'dd/MM/yyyy' }}</div>
+          <div class="small text-muted" *ngIf="p.monthsPaid">{{ p.monthsPaid }} mois couvert(s)</div>
+          <div class="small text-muted" *ngIf="p.sessionsPaid">{{ p.sessionsPaid }} séance(s) couverte(s)</div>
+          <div class="small text-muted fst-italic" *ngIf="p.comment">{{ p.comment }}</div>
+        </div>
+      </div>
+      <div class="d-flex align-items-center gap-3">
+        <span class="payment-amount">{{ p.amount }} Dt</span>
+        <button class="btn-icon-danger" (click)="supprimerPaiement(p.id)">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="empty-state-mini py-5" *ngIf="payments.length === 0">
+      <i class="bi bi-receipt"></i>
+      Aucun paiement enregistré.
+    </div>
+  </div>
+
+</div>

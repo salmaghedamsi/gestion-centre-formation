@@ -1,0 +1,72 @@
+<div class="form-page-wrapper">
+
+  <a routerLink="/students" class="back-link">
+    <i class="bi bi-arrow-left"></i> Retour aux élèves
+  </a>
+
+  <div class="form-header">
+    <div class="form-header-icon">
+      <i class="bi bi-person-plus"></i>
+    </div>
+    <div>
+      <h3 class="mb-0">{{ isEditMode ? "Modifier l'élève" : "Ajouter un élève" }}</h3>
+      <p class="text-muted small mb-0">Renseignez les informations de l'élève</p>
+    </div>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-card">
+
+    <div class="row g-3 mb-3">
+      <div class="col-6">
+        <label class="form-label">
+          <i class="bi bi-person"></i> Nom
+        </label>
+        <input type="text" class="form-control" formControlName="lastName" placeholder="Dupont">
+        <div class="text-danger small mt-1" *ngIf="form.get('lastName')?.invalid && form.get('lastName')?.touched">
+          Le nom est requis.
+        </div>
+      </div>
+      <div class="col-6">
+        <label class="form-label">
+          <i class="bi bi-person"></i> Prénom
+        </label>
+        <input type="text" class="form-control" formControlName="firstName" placeholder="Camille">
+        <div class="text-danger small mt-1" *ngIf="form.get('firstName')?.invalid && form.get('firstName')?.touched">
+          Le prénom est requis.
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">
+        <i class="bi bi-telephone"></i> Téléphone
+      </label>
+      <input type="text" class="form-control" formControlName="phone" placeholder="06 12 34 56 78">
+    </div>
+
+    <div class="row g-3 mb-1">
+      <div class="col-6">
+        <label class="form-label">
+          <i class="bi bi-calendar3"></i> Date de naissance
+        </label>
+        <input type="date" class="form-control" formControlName="birthDate">
+      </div>
+      <div class="col-6">
+        <label class="form-label">
+          <i class="bi bi-mortarboard"></i> Niveau scolaire
+        </label>
+        <input type="text" class="form-control" formControlName="level" placeholder="Ex: Collège">
+      </div>
+    </div>
+
+    <div class="d-flex gap-2 form-actions">
+      <button type="submit" class="btn btn-add-teacher flex-fill" [disabled]="form.invalid || saving">
+        <i class="bi bi-check-lg"></i>
+        {{ saving ? 'Enregistrement...' : (isEditMode ? 'Enregistrer' : "Ajouter l'élève") }}
+      </button>
+      <button type="button" class="btn btn-outline-secondary flex-fill" (click)="onCancel()">Annuler</button>
+    </div>
+
+  </form>
+
+</div>

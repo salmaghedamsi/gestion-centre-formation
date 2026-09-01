@@ -1,0 +1,103 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h3 class="mb-1 fw-bold text-dark">Liste des Élèves</h3>
+    <p class="text-muted small mb-0">{{ students.length }} élève(s) inscrit(s)</p>
+  </div>
+  <button class="btn btn-add-teacher d-flex align-items-center gap-2" routerLink="/student/add">
+    <i class="bi bi-plus-lg"></i>
+    Ajouter un élève
+  </button>
+</div>
+
+<!-- Cartes de statistiques par niveau -->
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3">
+    <div class="stat-card bg-light-neutral">
+      <p class="stat-label">Total élèves</p>
+      <p class="stat-value">{{ students.length }}</p>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="stat-card stat-purple">
+      <p class="stat-label">Primaire</p>
+      <p class="stat-value">{{ countByCategory('Primaire') }}</p>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="stat-card stat-blue">
+      <p class="stat-label">Collège</p>
+      <p class="stat-value">{{ countByCategory('Collège') }}</p>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="stat-card stat-orange">
+      <p class="stat-label">Lycée</p>
+      <p class="stat-value">{{ countByCategory('Lycée') }}</p>
+    </div>
+  </div>
+</div>
+
+<!-- Carte principale -->
+<div class="card main-table-card border-0">
+  <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <h5 class="mb-0 fw-semibold">Liste des élèves</h5>
+    <div class="d-flex align-items-center gap-2">
+      <div class="search-box d-flex align-items-center">
+        <i class="bi bi-search"></i>
+        <input
+          type="text"
+          class="form-control form-control-sm border-0 shadow-none"
+          placeholder="Rechercher un élève..."
+          [(ngModel)]="searchTerm"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0 align-middle">
+      <thead>
+        <tr>
+          <th class="ps-3">Élève</th>
+          <th>Niveau scolaire</th>
+          <th>Date de naissance</th>
+          <th>Téléphone</th>
+          <th class="text-end pe-3">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of filteredStudents(); let i = index">
+          <td class="ps-3">
+            <div class="d-flex align-items-center gap-2">
+              <div class="avatar" [ngClass]="avatarClass(i)">
+                {{ s.firstName[0] }}{{ s.lastName[0] }}
+              </div>
+              <span class="fw-medium">{{ s.firstName }} {{ s.lastName }}</span>
+            </div>
+          </td>
+          <td>
+            <span class="badge-level" [ngClass]="'level-' + categoryOf(s.level)">
+              {{ s.level }}
+            </span>
+          </td>
+          <td class="text-muted">{{ s.birthDate | date }}</td>
+          <td class="text-muted">{{ s.phone }}</td>
+          <td class="text-end pe-3">
+            <button class="btn btn-sm btn-icon me-1" [routerLink]="['/student', 'edit', s.id]">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-sm btn-icon btn-icon-danger" (click)="onDelete(s.id)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredStudents().length === 0">
+          <td colspan="5" class="text-center text-muted py-5">
+            <i class="bi bi-person-x d-block mb-2" style="font-size:1.8rem; color:#cbd5e1;"></i>
+            Aucun élève pour l'instant.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

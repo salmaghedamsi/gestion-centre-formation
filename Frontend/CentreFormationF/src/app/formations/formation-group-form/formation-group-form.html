@@ -1,0 +1,58 @@
+<div class="form-page-wrapper">
+  <a routerLink="/formations" class="back-link">
+    <i class="bi bi-arrow-left"></i> Retour aux formations
+  </a>
+
+  <div class="form-header">
+    <div class="form-header-icon">
+      <i class="bi bi-journal-bookmark"></i>
+    </div>
+    <div>
+      <h3 class="mb-0">{{ isEditMode ? 'Modifier la formation' : 'Créer une formation' }}</h3>
+      <p class="text-muted small mb-0">Renseignez les informations de la formation</p>
+    </div>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-card">
+
+    <div class="mb-3">
+      <label class="form-label">
+        <i class="bi bi-book"></i> Matière
+      </label>
+      <input type="text" class="form-control" formControlName="Subject" placeholder="Ex: Mathématiques">
+      <div class="text-danger small mt-1" *ngIf="form.get('Subject')?.invalid && form.get('Subject')?.touched">
+        La matière est obligatoire.
+      </div>
+    </div>
+
+    <div class="row g-3 mb-1">
+      <div class="col-6">
+        <label class="form-label">
+          <i class="bi bi-currency-exchange"></i> Prix (Dt)
+        </label>
+        <input type="number" class="form-control" formControlName="Price" placeholder="0" min="0">
+        <div class="text-danger small mt-1" *ngIf="form.get('Price')?.invalid && form.get('Price')?.touched">
+          Indiquez un prix valide.
+        </div>
+      </div>
+      <div class="col-6">
+        <label class="form-label">
+          <i class="bi bi-credit-card"></i> Mode de paiement
+        </label>
+        <select class="form-select" formControlName="paymentType">
+          <option value="MONTHLY">Mensuel</option>
+          <option value="PER_SESSION">À la séance</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="d-flex gap-2 form-actions">
+      <button type="submit" class="btn btn-add-teacher flex-fill" [disabled]="form.invalid || saving">
+        <i class="bi bi-check-lg"></i>
+        {{ saving ? 'Enregistrement...' : (isEditMode ? 'Enregistrer' : 'Créer') }}
+      </button>
+      <button type="button" class="btn btn-outline-secondary flex-fill" (click)="onCancel()">Annuler</button>
+    </div>
+
+  </form>
+</div>

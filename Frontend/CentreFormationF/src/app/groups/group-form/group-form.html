@@ -1,0 +1,97 @@
+<div class="form-page-wrapper">
+
+  <a routerLink="/groups" class="back-link">
+    <i class="bi bi-arrow-left"></i> Retour aux groupes
+  </a>
+
+  <div class="form-header">
+    <div class="form-header-icon">
+      <i class="bi bi-people"></i>
+    </div>
+    <div>
+      <h3 class="mb-0">{{ isEditMode ? 'Modifier le groupe' : 'Créer un groupe' }}</h3>
+      <p class="text-muted small mb-0">Renseignez les informations du groupe</p>
+    </div>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-card">
+
+    <div class="mb-3">
+      <label class="form-label">
+        <i class="bi bi-journal-bookmark"></i> Formation
+      </label>
+      <select class="form-select" formControlName="formationGroupId">
+        <option value="" disabled>Sélectionner une formation</option>
+        <option *ngFor="let formation of formations" [value]="formation.id">
+          {{ formation.Subject }} — {{ formation.Price }} € {{ formation.paymentType === 'MONTHLY' ? '/ mois' : '/ séance' }}
+        </option>
+      </select>
+      <div class="text-danger small mt-1" *ngIf="form.get('formationGroupId')?.invalid && form.get('formationGroupId')?.touched">
+        La formation est obligatoire.
+      </div>
+
+      <div class="form-hint" *ngIf="formationSelectionnee()">
+        <i class="bi bi-info-circle"></i>
+        Ce groupe héritera du mode de paiement
+        <strong>{{ formationSelectionnee()?.paymentType === 'MONTHLY' ? 'mensuel' : 'à la séance' }}</strong>
+        de la formation.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">
+        <i class="bi bi-person-check"></i> Formateur titulaire
+      </label>
+      <select class="form-select" formControlName="enseignantId">
+        <option value="" disabled>Sélectionner un formateur</option>
+        <option *ngFor="let formateur of formateurs" [value]="formateur.id">
+          {{ formateur.firstName }} {{ formateur.lastName }}
+        </option>
+      </select>
+      <div class="text-danger small mt-1" *ngIf="form.get('enseignantId')?.invalid && form.get('enseignantId')?.touched">
+        Le formateur est obligatoire.
+      </div>
+    </div>
+
+    <div class="row g-3 mb-3">
+      <div class="col-6">
+        <label class="form-label">
+          <i class="bi bi-calendar-plus"></i> Date de début
+        </label>
+        <input type="datetime-local" class="form-control" formControlName="startDate">
+        <div class="text-danger small mt-1" *ngIf="form.get('startDate')?.invalid && form.get('startDate')?.touched">
+          La date de début est obligatoire.
+        </div>
+      </div>
+      <div class="col-6">
+        <label class="form-label">
+          <i class="bi bi-calendar-x"></i> Date de fin
+        </label>
+        <input type="datetime-local" class="form-control" formControlName="endDate">
+        <div class="text-danger small mt-1" *ngIf="form.hasError('dateRangeInvalid') && form.get('endDate')?.touched">
+          La date de fin doit être après la date de début.
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-1">
+      <label class="form-label">
+        <i class="bi bi-person-lines-fill"></i> Places maximum
+      </label>
+      <input type="number" class="form-control" formControlName="maxPlaces" placeholder="20" min="1">
+      <div class="text-danger small mt-1" *ngIf="form.get('maxPlaces')?.invalid && form.get('maxPlaces')?.touched">
+        Indiquez un nombre de places valide (minimum 1).
+      </div>
+    </div>
+
+    <div class="d-flex gap-2 form-actions">
+      <button type="submit" class="btn btn-add-teacher flex-fill" [disabled]="form.invalid || saving">
+        <i class="bi bi-check-lg"></i>
+        {{ saving ? 'Enregistrement...' : (isEditMode ? 'Enregistrer' : 'Créer le groupe') }}
+      </button>
+      <button type="button" class="btn btn-outline-secondary flex-fill" (click)="onCancel()">Annuler</button>
+    </div>
+
+  </form>
+
+</div>

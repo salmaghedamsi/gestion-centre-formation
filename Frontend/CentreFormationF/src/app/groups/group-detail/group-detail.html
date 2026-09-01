@@ -1,0 +1,129 @@
+<div class="group-detail-wrapper">
+
+  <!-- Bandeau élèves, compact -->
+  <div class="students-band">
+    <div class="students-band-info">
+      <i class="bi bi-people"></i>
+      <span>{{ inscriptionsActives().length }} élève(s) inscrit(s)</span>
+    </div>
+    <button class="btn btn-manage-students" (click)="toggleGestionEleves()">
+      Gérer les élèves
+      <i class="bi bi-chevron-right" [class.rotated]="afficherGestionEleves"></i>
+    </button>
+  </div>
+
+  <div class="alert alert-warning-custom small" *ngIf="groupeComplet()">
+    <i class="bi bi-exclamation-triangle"></i>
+    Ce groupe a atteint sa capacité maximale ({{ group?.maxPlaces }} places).
+  </div>
+
+  <!-- Panneau de gestion des élèves, masqué par défaut -->
+  <div class="students-panel" *ngIf="afficherGestionEleves">
+
+    <div class="d-flex gap-2 mb-3">
+      <select class="form-select" [(ngModel)]="eleveASelectId" [disabled]="groupeComplet()">
+        <option [ngValue]="null">Sélectionner un élève</option>
+        <option *ngFor="let eleve of elevesDisponibles()" [ngValue]="eleve.id">
+          {{ eleve.firstName }} {{ eleve.lastName }}
+        </option>
+      </select>
+      <button class="btn btn-add-teacher" (click)="ajouterEleve()" [disabled]="!eleveASelectId || groupeComplet()">
+        <i class="bi bi-plus-lg"></i> Ajouter
+      </button>
+    </div>
+
+    <div class="students-list" *ngIf="inscriptionsActives().length > 0">
+      <div class="student-row-compact" *ngFor="let inscription of inscriptionsActives()">
+        <div class="d-flex align-items-center gap-2">
+          <div class="avatar avatar-sm" [ngClass]="avatarClass(inscription.student.id)">
+            {{ inscription.student.firstName.charAt(0) }}{{ inscription.student.lastName.charAt(0) }}
+          </div>
+          <span class="small fw-medium">{{ inscription.student.firstName }} {{ inscription.student.lastName }}</span>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-sm btn-payment" [routerLink]="['/group-students', inscription.id, 'payments']">
+            <i class="bi bi-cash"></i>
+          </button>
+          <button class="btn-icon-text-danger" (click)="retirerEleve(inscription.student.id)">
+            <i class="bi bi-person-dash"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state-mini" *ngIf="inscriptionsActives().length === 0">
+      <i class="bi bi-person-x"></i>
+      Aucun élève inscrit dans ce groupe.
+    </div>
+
+  </div>
+
+  <!-- Séances = contenu principal -->
+  <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+    <p class="sessions-title">
+      <i class="bi bi-calendar-week"></i> Séances
+    </p>
+    <span class="sessions-count">{{ sessions.length }} au total</span>
+  </div>
+
+  <div class="session-add-card">
+    <div class="row g-2 align-items-end">
+      <div class="col-5">
+        <label class="mini-label">Date</label>
+<input
+  type="date"
+  class="form-control"
+  [(ngModel)]="nouvelleDate"
+  [min]="dateMinSeance()"
+  [max]="dateMaxSeance()"
+>      </div>
+      <div class="col-3">
+        <label class="mini-label">Début</label>
+        <input type="time" class="form-control" [(ngModel)]="nouvelleHeureDebut">
+      </div>
+      <div class="col-3">
+        <label class="mini-label">Fin</label>
+        <input type="time" class="form-control" [(ngModel)]="nouvelleHeureFin">
+      </div>
+      <div class="col-1">
+        <button class="btn btn-add-teacher w-100" (click)="ajouterSession()" [disabled]="!nouvelleDate">
+          <i class="bi bi-plus-lg"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sessions-list">
+    <div
+      class="session-card"
+      *ngFor="let session of sessions"
+      [routerLink]="['/sessions', session.id]"
+    >
+      <div class="d-flex align-items-center gap-3">
+        <div class="session-date-chip">
+          <span class="session-month">{{ session.date | date:'MMM' }}</span>
+          <span class="session-day">{{ session.date | date:'dd' }}</span>
+        </div>
+        <div>
+          <p class="session-full-date">{{ session.date | date:'EEEE d MMMM yyyy' }}</p>
+          <p class="session-time" *ngIf="session.startTime">
+            <i class="bi bi-clock"></i>
+            {{ session.startTime.substring(0,5) }} - {{ session.endTime ? session.endTime.substring(0,5) : '' }}
+          </p>
+        </div>
+        <span class="badge-free" *ngIf="session.free">
+          <i class="bi bi-gift"></i> Gratuite
+        </span>
+      </div>
+      <button class="btn-icon-danger" (click)="supprimerSession(session.id, $event)">
+        <i class="bi bi-trash"></i>
+      </button>
+    </div>
+
+    <div class="empty-state-mini py-4" *ngIf="sessions.length === 0">
+      <i class="bi bi-calendar-x"></i>
+      Aucune séance pour l'instant.
+    </div>
+  </div>
+
+</div>

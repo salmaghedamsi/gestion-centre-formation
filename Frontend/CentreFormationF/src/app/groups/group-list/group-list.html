@@ -1,0 +1,83 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h3 class="mb-1 fw-bold text-dark">Groupes</h3>
+    <p class="text-muted small mb-0">{{ groups.length }} groupe(s) au total</p>
+  </div>
+  <button class="btn btn-primary d-flex align-items-center gap-2 shadow-sm" routerLink="/groups/add">
+    <i class="bi bi-plus-lg"></i>
+    Créer un groupe
+  </button>
+</div>
+
+<div class="row g-3">
+  <div class="col-md-6 col-lg-4" *ngFor="let group of groups">
+    <div class="card border-0 shadow-sm h-100 group-card" [routerLink]="['/groups', group.id]">
+      <div class="card-body p-4">
+
+        <div class="d-flex align-items-start justify-content-between mb-3">
+          <span class="badge subject-badge px-3 py-2 rounded-pill">
+            {{ group.formationGroup?.Subject }}
+          </span>
+          <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-sm btn-icon-danger" (click)="supprimer(group.id, $event)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        </div>
+
+        <h6 class="fw-semibold mb-1 text-dark">{{ group.name }}</h6>
+
+        <div class="d-flex align-items-center gap-2 mb-3 mt-2">
+          <div class="avatar-circle">
+            {{ group.teacher ? group.teacher.firstName.charAt(0) + group.teacher.lastName.charAt(0) : '?' }}
+          </div>
+          <div>
+            <div class="small text-muted">Formateur</div>
+            <div class="fw-medium small text-dark">
+              {{ group.teacher ? group.teacher.firstName + ' ' + group.teacher.lastName : 'Non assigné' }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Capacité -->
+        <div class="mb-3">
+          <div class="d-flex justify-content-between small text-muted mb-1">
+            <span class="fw-medium">{{ group.activeStudentsCount || 0 }} / {{ group.maxPlaces }} places</span>
+            <span>{{ capaciteRestante(group) }} restante(s)</span>
+          </div>
+          <div class="progress" style="height: 7px;">
+            <div
+              class="progress-bar"
+              [ngClass]="capaciteClass(group)"
+              [style.width.%]="tauxRemplissage(group)"
+            ></div>
+          </div>
+        </div>
+
+        <hr class="my-3">
+
+        <div class="d-flex align-items-center justify-content-between small">
+          <span class="d-flex align-items-center gap-1 text-muted">
+            <i class="bi bi-calendar3"></i>
+            {{ group.startDate | date:'dd/MM/yy' }}
+          </span>
+          <span class="d-flex align-items-center gap-1 price-tag">
+            <i class="bi" [ngClass]="group.paymentType === 'MONTHLY' ? 'bi-calendar-month' : 'bi-check2-square'"></i>
+            {{ group.formationGroup?.Price }} Dt {{ group.paymentType === 'MONTHLY' ? '/ mois' : '/ séance' }}
+          </span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12" *ngIf="groups.length === 0">
+    <div class="text-center py-5">
+      <i class="bi bi-diagram-3 display-4 text-muted"></i>
+      <p class="text-muted mt-2 mb-3">Aucun groupe pour l'instant.</p>
+      <button class="btn btn-primary" routerLink="/groups/add">
+        <i class="bi bi-plus-lg"></i> Créer le premier groupe
+      </button>
+    </div>
+  </div>
+</div>
