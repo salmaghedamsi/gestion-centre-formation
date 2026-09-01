@@ -17,6 +17,6 @@ public class SessionCreationDTO {
     private LocalTime startTime;
 
     private LocalTime endTime;
-
+private String comment;
     private boolean free;
 }

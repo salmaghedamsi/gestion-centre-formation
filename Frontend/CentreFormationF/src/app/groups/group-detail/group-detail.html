@@ -70,13 +70,14 @@
     <div class="row g-2 align-items-end">
       <div class="col-5">
         <label class="mini-label">Date</label>
-<input
-  type="date"
-  class="form-control"
-  [(ngModel)]="nouvelleDate"
-  [min]="dateMinSeance()"
-  [max]="dateMaxSeance()"
->      </div>
+        <input
+          type="date"
+          class="form-control"
+          [(ngModel)]="nouvelleDate"
+          [min]="dateMinSeance()"
+          [max]="dateMaxSeance()"
+        >
+      </div>
       <div class="col-3">
         <label class="mini-label">Début</label>
         <input type="time" class="form-control" [(ngModel)]="nouvelleHeureDebut">
@@ -84,6 +85,10 @@
       <div class="col-3">
         <label class="mini-label">Fin</label>
         <input type="time" class="form-control" [(ngModel)]="nouvelleHeureFin">
+      </div>
+      <div class="col-md-2">
+        <label class="mini-label">Commentaire</label>
+        <input type="text" class="form-control" [(ngModel)]="nouveauCommentaire" placeholder="Optionnel">
       </div>
       <div class="col-1">
         <button class="btn btn-add-teacher w-100" (click)="ajouterSession()" [disabled]="!nouvelleDate">
@@ -110,6 +115,7 @@
             <i class="bi bi-clock"></i>
             {{ session.startTime.substring(0,5) }} - {{ session.endTime ? session.endTime.substring(0,5) : '' }}
           </p>
+          <p class="small text-muted fst-italic mb-0" *ngIf="session.comment">{{ session.comment }}</p>
         </div>
         <span class="badge-free" *ngIf="session.free">
           <i class="bi bi-gift"></i> Gratuite

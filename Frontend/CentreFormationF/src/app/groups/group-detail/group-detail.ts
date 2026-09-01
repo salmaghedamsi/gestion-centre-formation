@@ -33,6 +33,8 @@ groupStudentOuvertId: number | null = null;
 paiements: Payment[] = [];
 nouveauMontant: number | null = null;
 nouvelleDatePaiement: string = '';
+  nouveauCommentaire = '';
+
   dateMinSeance(): string {
     if (!this.group?.startDate) return '';
     return this.group.startDate.substring(0, 10);
@@ -198,16 +200,18 @@ ajouterSession(): void {
     date: this.nouvelleDate,
     startTime: this.nouvelleHeureDebut || null,
     endTime: this.nouvelleHeureFin || null,
+    comment: this.nouveauCommentaire || null,
     free: false
   };
-
   this.sessionService.create(payload).subscribe({
     next: () => {
       this.chargerSessions();
       this.nouvelleDate = '';
       this.nouvelleHeureDebut = '';
       this.nouvelleHeureFin = '';
+      this.nouveauCommentaire = '';
     },
+    
     error: (err: any) => {
       const message = err?.error?.message || 'Erreur lors de la création de la séance';
       alert(message);

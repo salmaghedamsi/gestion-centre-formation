@@ -171,6 +171,10 @@
   class="text-end mt-4"
   *ngIf="elevesGroupe.length > 0"
 >
+<a
+    [routerLink]="['/groups', session.group?.id]"
+    class="back-link"
+  >
   <button
     class="btn btn-primary"
     (click)="savePresences()"
@@ -180,6 +184,7 @@
 
     {{ saving ? 'Enregistrement...' : 'Valider les présences' }}
   </button>
+  </a>
 </div>
     <div
       class="empty-state"

@@ -53,6 +53,9 @@ public class Session {
     @Column(nullable = false)
     private boolean free = false;
 
+    @Column
+    private String comment;
+
     /**
      * Attendance records for this session.
      */

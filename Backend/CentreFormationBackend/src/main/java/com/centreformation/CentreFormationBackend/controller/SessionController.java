@@ -63,6 +63,7 @@ public class SessionController {
         session.setDate(dto.getDate());
         session.setStartTime(dto.getStartTime());
         session.setEndTime(dto.getEndTime());
+        session.setComment(dto.getComment());
         session.setFree(dto.isFree());
 
         return sessionService.save(session);
