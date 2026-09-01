@@ -31,14 +31,21 @@ gestion-centre-formation/
 ├── Backend/     # API REST Spring Boot
 └── Frontend/    # Application Angular
 ```
+## Stack technique
 
-## Prérequis
+**Backend**
+Java v 21.0.11
+Spring Framework (web / webmvc / orm)	7.0.8
+Spring Security	7.1.0
+Spring Data JPA / Commons	4.1.0
+Hibernate ORM	7.4.1.Final
+Tomcat embarqué	11.0.22
+MySQL Connector/J	9.7.0
 
-- Java JDK 17 ou supérieur
-- Maven
-- Node.js et npm
-- Angular CLI
-- MySQL
+**Frontend**
+Angular CLI: 20.3.28
+Node: 24.13.0
+
 
 ## Installation et lancement
 
